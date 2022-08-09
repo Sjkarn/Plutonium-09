@@ -41,20 +41,20 @@ router.get('/test-me', function (req, res) {
     let arrToObj = lodash.fromPairs(array);
     console.log(arrToObj)
     
-    // router.get('/movies-list',function (req,res){
-    //     let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
-    //     res.send(movies)
-    // })
+    router.get('/movies-list',function (req,res){
+        let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
+        res.send(movies)
+    })
 
-    // router.get('/movies-list/:indexNumber',function (req,res){
-    //     let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
-    //     console.log(req.params.indexNumber)
-    //     let movieIndex = req.params.indexNumber
-    //     let requiredMovie = movies[movieIndex]
-    //     res.send(requiredMovie)
-    // })
+    router.get('/movies-list/:indexNumber',function (req,res){
+        let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
+        console.log(req.params.indexNumber)
+        let movieIndex = req.params.indexNumber
+        let requiredMovie = movies[movieIndex]
+        res.send(requiredMovie)
+    })
 
-    router.get('/movies-item/:indexNumber',function (req,res){
+    router.get("/movies-list/:indexNumber",function (req,res){
         let movies = ['Rang de basanti', 'The shining', 'Lord of the rings', 'Batman begins']
         console.log(req.params.indexNumber)
         let movieIndex = req.params.indexNumber
