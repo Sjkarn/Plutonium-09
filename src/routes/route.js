@@ -4,7 +4,7 @@ const abc = require('../introduction/intro')
 const logg = require('../logger/loggers')
 const help = require('../util/helper')
 const valid = require('../validator/formatter')
-const router = express.Router;
+const router = express.Router();
 
 router.get('/test-me', function (req, res) {
     console.log('My batch is', abc.name)
@@ -41,25 +41,25 @@ router.get('/test-me', function (req, res) {
     let arrToObj = lodash.fromPairs(array);
     console.log(arrToObj)
     
-    router.get('/movies-list',function (req,res){
-        let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
-        res.send(movies)
-    })
+    // router.get('/movies-list',function (req,res){
+    //     let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
+    //     res.send(movies)
+    // })
 
-    router.get('/movies-list/:indexNumber',function (req,res){
-        let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
-        console.log(req.params.indexNumber)
-        let movieIndex = req.params.indexNumber
-        let requiredMovie = movies[movieIndex]
-        res.send(requiredMovie)
-    })
+    // router.get('/movies-list/:indexNumber',function (req,res){
+    //     let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
+    //     console.log(req.params.indexNumber)
+    //     let movieIndex = req.params.indexNumber
+    //     let requiredMovie = movies[movieIndex]
+    //     res.send(requiredMovie)
+    // })
 
-    router.get('/movies-list/:indexNumber',function (req,res){
+    router.get('/movies-item/:indexNumber',function (req,res){
         let movies = ['Rang de basanti', 'The shining', 'Lord of the rings', 'Batman begins']
         console.log(req.params.indexNumber)
         let movieIndex = req.params.indexNumber
         if (movieIndex<0 || movieIndex>=movies.length){
-            res.send('The index value is not correct,Pls check it')
+            return res.send('The index value is not correct,Pls check it')
         }
         let requiredMovie = movies[movieIndex]
         res.send(requiredMovie)
@@ -133,39 +133,39 @@ router.get('/test-me', function (req, res) {
         console.log('Candidates name is '+req.params.canidatesName)
         res.send('Done')
     })
-    // router.get("/sol1", function (req, res) {
+    router.get("/sol1", function (req, res) {
     
-    //     let arr= [1,2,3,5,6,7]
+        let arr= [1,2,3,5,6,7]
       
-    //     let total = 0;
-    //     for (var i in arr) {
-    //         total += arr[i];
-    //     }
+        let total = 0;
+        for (var i in arr) {
+            total += arr[i];
+        }
       
-    //     let lastDigit= arr.pop()
-    //     let consecutiveSum= lastDigit * (lastDigit+1) / 2
-    //     let missingNumber= consecutiveSum - total
+        let lastDigit= arr.pop()
+        let consecutiveSum= lastDigit * (lastDigit+1) / 2
+        let missingNumber= consecutiveSum - total
       
-    //     res.send(  { data: missingNumber  }  );
-    //   });
+        res.send(  { data: missingNumber  }  );
+      });
       
-    //   router.get("/sol2", function (req, res) {
+      router.get("/sol2", function (req, res) {
     
-    //     let arr= [33, 34, 35, 37, 38]
-    //     let len= arr.length
+        let arr= [33, 34, 35, 37, 38]
+        let len= arr.length
       
-    //     let total = 0;
-    //     for (var i in arr) {
-    //         total += arr[i];
-    //     }
+        let total = 0;
+        for (var i in arr) {
+            total += arr[i];
+        }
       
-    //     let firstDigit= arr[0]
-    //     let lastDigit= arr.pop()
-    //     let consecutiveSum= (len + 1) * (firstDigit+ lastDigit ) / 2
-    //     let missingNumber= consecutiveSum - total
+        let firstDigit= arr[0]
+        let lastDigit= arr.pop()
+        let consecutiveSum= (len + 1) * (firstDigit+ lastDigit ) / 2
+        let missingNumber= consecutiveSum - total
        
-    //     res.send(  { data: missingNumber  }  );
-    //   });
+        res.send(  { data: missingNumber  }  );
+      });
      
     res.send('My second ever api!')
 });
