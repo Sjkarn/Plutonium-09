@@ -166,9 +166,8 @@ router.get('/test-me', function (req, res) {
        
         res.send(  { data: missingNumber  }  );
       });
-      
-      router.post('/players', function (req, res) {
-        let players =
+
+      let players =
    [
        {
            "name": "manish",
@@ -186,7 +185,7 @@ router.get('/test-me', function (req, res) {
            "city": "delhi",
            "sports": [
                "soccer"
-           ],
+           ]
        },
        {
            "name": "lokesh",
@@ -195,14 +194,30 @@ router.get('/test-me', function (req, res) {
            "city": "mumbai",
            "sports": [
                "soccer"
-           ],
+           ]
        },
    ]
+   router.post('/players', function (req, res) {
+    
+    let newPlayer = req.body
+    let newPlayersName = newPlayer.name
+    let isNameRepeated = false
 
-        res.send(  { data: players , status: true }  )
-    });
- 
-    res.send('My second ever api!')
+    for(let i = 0; i < players.length; i++) {
+        if(players[i].name == newPlayersName) {
+            isNameRepeated = true;
+            break;
+        }
+    }
+    if (isNameRepeated) {
+        res.send("This player was already added!")
+    } else {
+        players.push(newPlayer)
+        res.send(players)
+    }
+});
+
+      res.send('My second ever api!')
 });
 
 router.get('/test-you', function(req, res){
