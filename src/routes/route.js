@@ -4,6 +4,10 @@ const abc = require('../introduction/intro')
 const logg = require('../logger/loggers')
 const help = require('../util/helper')
 const valid = require('../validator/formatter')
+const UserModel= require("../models/userModel.js")
+const UserController= require("../controllers/userController")
+const BookController= require("../controllers/bookController")
+const Books_AuthorsController= require("../controllers/books_AuthorsController")
 const router = express.Router();
 
 router.get('/test-me', function (req, res) {
@@ -22,6 +26,7 @@ router.get('/test-me', function (req, res) {
     // logg.printName()
     // abc.printName()
 
+    // ***
     const arr = ["January","Febuary","March","April","May","June","July","August","September","Octuber","November","December"]
     let result1 = lodash.chunk(arr,[size=4]);
     console.log(result1)
@@ -41,6 +46,7 @@ router.get('/test-me', function (req, res) {
     let arrToObj = lodash.fromPairs(array);
     console.log(arrToObj)
     
+    // ***
     router.get('/movies-list',function (req,res){
         let movies = ['The Shining','Titanic','Shutter Island','Pans Labyrinth','John Wick','Harry Potter','Pirates Of The Caribbean']
         res.send(movies)
@@ -108,6 +114,7 @@ router.get('/test-me', function (req, res) {
            res.send("The film id doesn't match any movie")
     })
     
+    // ***
     router.get("/shoes", function(req, res){
         let queryParams = req.query
         let brand = queryParams.brand
@@ -133,6 +140,8 @@ router.get('/test-me', function (req, res) {
         console.log('Candidates name is '+req.params.canidatesName)
         res.send('Done')
     })
+    
+    // ***
     router.get("/sol1", function (req, res) {
     
         let arr= [1,2,3,5,6,7]
@@ -167,6 +176,7 @@ router.get('/test-me', function (req, res) {
         res.send(  { data: missingNumber  }  );
       });
 
+      // ***
       let players =
    [
        {
@@ -217,9 +227,77 @@ router.get('/test-me', function (req, res) {
     }
 });
 
+// ***
+    let person= [
+        {
+            name: "PK",
+            age: 10,
+            votingStatus: false
+        },
+        {
+            name: "SK",
+            age: 20,
+            votingStatus: false
+        },
+        {
+            name: "AA",
+            age: 70,
+            votingStatus: false
+        },
+        {
+            name: "SC",
+            age: 5,
+            votingStatus: false
+        },
+        {
+            name: "HO",
+            age: 40,
+            votingStatus: false
+        },
+    ]
+
+    router.post("/getvotingstatus", function (req, res) {
+        let VotingAge = req.query.age
+        let ElegiblePerson = []
+        for (let i = 0; i < person.length; i++)
+        {
+            if (person[i].age > VotingAge) {
+                person[i].votingStatus = true;
+                ElegiblePerson.push(person[i])
+            }
+        }
+        res.send({ person: ElegiblePerson, status: true })
+    })
+    
       res.send('My second ever api!')
 });
 
+// ***
+router.post("/createUser", UserController.createUser)
+
+router.get("/getUsersData", UserController.getUsersData)
+
+// ***
+router.post("/newBook", UserController.newBook)
+
+router.get("/bookList", UserController.bookList)
+
+// ***
+router.post("/createBook", BookController.createBook)
+router.get("/allBookList", BookController.allBooksList)
+router.post("/yearDetails", BookController.yearDetails)
+router.post("/particularBooks", BookController.particularBooks)
+router.post("/priceDetails", BookController.priceDetails)
+router.post("/randomBooks", BookController.randomBooks)
+
+// ***
+router.post("/createBooks", Books_AuthorsController.createBooks)
+router.post("/create_books", Books_AuthorsController.create_Books)
+router.get("/listBooks", Books_AuthorsController.listBooks)
+router.post("/updatebook", Books_AuthorsController.updatebook)
+router.post("bookrange", Books_AuthorsController.bookrange)
+
+// ***
 router.get('/test-you', function(req, res){
     res.send('This is the second routes implementation')
 })
