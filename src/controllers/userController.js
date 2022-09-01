@@ -8,19 +8,24 @@ const createUser = async function (abcd, xyz) {
   //You can name the req, res objects anything.
   //but the first parameter is always the request 
   //the second parameter is always the response
-  let data = abcd.body;
+  try{let data = abcd.body;
   let savedData = await userModel.create(data);
   console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
+  xyz.status(201).send({ msg: savedData });
+}
+catch (err) {
+  console.log("This is the error:", err.message)
+  res.status(500).send({msg:"Error", error: err.message})
+}
 };
 
 const loginUser = async function (req, res) {
-  let userName = req.body.emailId;
+  try{let userName = req.body.emailId;
   let password = req.body.password;
 
   let user = await userModel.findOne({ emailId: userName, password: password });
   if (!user)
-    return res.send({
+    return res.status(400).send({
       status: false,
       msg: "username or the password is not corerct",
     });
@@ -34,21 +39,26 @@ const loginUser = async function (req, res) {
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "thorium",
+      batch: "plutonium",
       organisation: "FunctionUp",
     },
     "functionup-plutonium-very-very-secret-key"
   );
   res.setHeader("x-auth-token", token);
-  res.send({ status: true, token: token });
+  res.status(200).send({ status: true, token: token });
+}
+catch (err) {
+  console.log("This is the error:", err.message)
+  res.status(500).send({msg:"Error", error: err.message})
+}
 };
 
 const getUserData = async function (req, res) {
-  let token = req.headers["x-Auth-token"];
+  try{let token = req.headers["x-Auth-token"];
   if (!token) token = req.headers["x-auth-token"];
 
   //If no token is present in the request header return error. This means the user is not logged in.
-  if (!token) return res.send({ status: false, msg: "token must be present" });
+  if (!token) return res.status(401).send({ status: false, msg: "token must be present" });
 
   console.log(token);
 
@@ -63,14 +73,18 @@ const getUserData = async function (req, res) {
   // And because this token is only known to the server, it can be assumed that if a token is decoded at server then this token must have been issued by the same server in past.
   let decodedToken = jwt.verify(token, "functionup-plutonium-very-very-secret-key");
   if (!decodedToken)
-    return res.send({ status: false, msg: "token is invalid" });
+    return res.status(403).send({ status: false, msg: "token is invalid" });
 
   let userId = req.params.userId;
   let userDetails = await userModel.findById(userId);
   if (!userDetails)
-    return res.send({ status: false, msg: "No such user exists" });
-
-  res.send({ status: true, data: userDetails });
+    return res.status(404).send({ status: false, msg: "No such user exists" });
+    res.status(200).send({ status: true, data: userDetails });
+  }
+  catch (err) {
+    console.log("This is the error:", err.message)
+    res.status(500).send({msg:"Error", error: err.message})
+  }
   // Note: Try to see what happens if we change the secret while decoding the token
 };
 
@@ -80,19 +94,37 @@ const updateUser = async function (req, res) {
   // Check if the token present is a valid token
   // Return a different error message in both these cases
 
-  let userId = req.params.userId;
+  try{let userId = req.params.userId;
   let user = await userModel.findById(userId);
   //Return an error if no user with the given id exists in the db
   if (!user) {
-    return res.send("No such user exists");
+    return res.status(404).send("No such user exists");
   }
 
   let userData = req.body;
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
-  res.send({ status: updatedUser, data: updatedUser });
+  res.status(201).send({ status: updatedUser, data: updatedUser });
+}
+catch (err) {
+  console.log("This is the error:", err.message)
+  res.status(500).send({msg:"Error", error: err.message})
+}
 };
+
+const deleteUser = async function (req, res) {
+  try {
+    let userId = req.params.userId;
+    let deleteUser = await userModel.findById(userId).select({isDeleted: 1, _id: 0});
+  if (deleteUser.isDeleted = true) return res.status(404).send({status: true, msg: "User has been deleted"});
+  }
+  catch (err) {
+    console.log("This is the error:", err)
+    res.status(500).send({msg:"Error", error: err.message})
+  }
+}
 
 module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.deleteUser = deleteUser;
